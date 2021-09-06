@@ -1,7 +1,17 @@
+import Navbar from "./components/Navbar";
+import "./styles/style.css";
+import { Router } from "@reach/router";
+import StockList from "./components/StockList";
+import Dashboard from "./components/Dashboard";
+
 function App() {
   return (
     <div className="App">
-      <h1>Welcome to the app...</h1>
+      <Navbar />
+      <Router>
+        <Dashboard path="dashboard" />
+        <StockList path="stock" />
+      </Router>
     </div>
   );
 }

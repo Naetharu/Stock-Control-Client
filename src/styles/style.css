@@ -1,0 +1,28 @@
+:root {
+  --primary-1: #274c77;
+  --primary-2: #e7ecef;
+  --secondary-1: #6096ba;
+  --secondary-2: #a3cef1;
+  --accent: #8b8c89;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-height: 100vh;
+  background-color: white;
+}
+
+#root,
+.App {
+  min-height: 100vh;
+}
+
+tr:nth-child(even) {
+  background-color: aliceblue;
+}
