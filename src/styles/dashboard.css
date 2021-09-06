@@ -2,6 +2,30 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: red;
-  height: 100%;
+  background-color: white;
+  height: 80vh;
+}
+
+.graphContainer {
+  height: 400px;
+  width: 800px;
+  box-shadow: 0px 0px 10px 10px #eee;
+  background-color: white;
+  border-radius: 6px;
+  padding: 40px;
+  margin: 20px;
+}
+
+.donutContainer {
+  width: 400px;
+  box-shadow: 0px 0px 10px 10px #eee;
+  background-color: white;
+  border-radius: 6px;
+  padding: 20px;
+  margin: 20px;
+}
+
+#testChart {
+  height: 360px;
+  width: 700px;
 }
