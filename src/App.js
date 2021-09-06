@@ -8,7 +8,7 @@ function App() {
   return (
     <div className="App">
       <Navbar />
-      <Router>
+      <Router className="router">
         <Dashboard path="dashboard" />
         <StockList path="stock" />
       </Router>

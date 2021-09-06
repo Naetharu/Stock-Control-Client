@@ -23,6 +23,10 @@ body {
   min-height: 100vh;
 }
 
+.router {
+  height: 94vh;
+}
+
 tr:nth-child(even) {
   background-color: aliceblue;
 }
