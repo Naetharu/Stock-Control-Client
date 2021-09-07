@@ -7,18 +7,35 @@ import { useState, useEffect } from "react";
 
 const Dashboard = () => {
   const [totalStock, setTotalStock] = useState([{}]);
+  const [status, setStatus] = useState("idle");
 
   useEffect(() => {
-    fetch("http://localhost:5000/stock/")
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-      })
-      .then((jsonRes) => setTotalStock(jsonRes.result));
-  }, []);
+    if (status === "idle" || status === "pending") {
+      try {
+        fetch("http://localhost:5000/stock/")
+          .then((res) => {
+            if (res.ok) {
+              return res.json();
+            }
+          })
+          .then((jsonRes) => setTotalStock(jsonRes.result));
+        setStatus("resolved");
+      } catch (error) {
+        console.log(error);
+        setStatus("rejected");
+      }
+    }
+  }, [status]);
 
   console.log("totalStock", totalStock);
+
+  if (status === "idle") {
+    return null;
+  }
+
+  if (status === "rejected") {
+    return <p>Something went wrong retriving data</p>;
+  }
 
   return (
     <div className="dashboardContainer">

@@ -14,6 +14,7 @@ const LineGraph = () => {
               fill: true,
               borderColor: "rgba(255, 206, 86, 1)",
               tension: 0.1,
+              backgroundColor: "rgba(54, 162, 235, 0.4)",
             },
           ],
         }}

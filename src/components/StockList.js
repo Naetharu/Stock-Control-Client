@@ -1,15 +1,11 @@
 import { useState, useEffect } from "react";
 import MaterialTable from "material-table";
-import {
-  postNewItem,
-  deleteTableItem,
-  updateTableItem,
-} from "../services/stockServices";
 
 const StockTypes = () => {
   const [stock, setStock] = useState([]);
-  const [refreshFlag, setrefreshFlag] = useState([]); // This is a hack - value does not matter but act of toggling kicks UseEffect into reloading. How should I be doing this..?
+  const [status, setStatus] = useState("idle"); // State machine - idle/pending/resolved - determines useEffect refreshes and render returns.
 
+  // Material Table object to determine table layout.
   const columns = [
     { title: "Name", field: "name" },
     {
@@ -40,50 +36,109 @@ const StockTypes = () => {
     { title: "Asset", field: "asset" },
   ];
 
-  useEffect(() => {
-    fetch("http://localhost:5000/stock/")
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-      })
-      .then((jsonRes) => setStock(jsonRes.result));
-  }, [refreshFlag]);
+  // CRUD functions for use in Material Table
 
+  // Read table data from database
+  useEffect(() => {
+    if (status === "idle" || status === "pending") {
+      fetch("http://localhost:5000/stock/")
+        .then((res) => {
+          if (res.ok) {
+            return res.json();
+          }
+        })
+        .then((jsonRes) => {
+          setStock(jsonRes.result);
+          setStatus("resolved");
+        })
+        .catch((err) => {
+          console.error(err);
+          setStatus("rejected");
+        });
+    }
+  }, [status]);
+
+  // Create a new entry in database
+  const handleOnRowAdd = async (newRow) => {
+    try {
+      const result = await fetch("http://localhost:5000/stock/", {
+        method: "POST",
+        headers: {
+          Accept: "application/json, text/plain, */*",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ item: newRow }),
+      });
+      console.log(result);
+      setStatus("pending");
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // Delete entry from database
+  const handleOnRowDelete = async (item) => {
+    try {
+      const result = await fetch("http://localhost:5000/stock/" + item._id, {
+        method: "DELETE",
+      })
+        .then((res) => res.json())
+        .then((res) => console.log(res));
+      setStatus("pending");
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // Update entry status on button click
+  const handleOnRowUpdate = async (item) => {
+    try {
+      const result = await fetch("http://localhost:5000/stock/" + item._id, {
+        method: "PUT",
+        headers: {
+          Accept: "application/json, text/plain, */*",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ item }),
+      })
+        .then((res) => res.json())
+        .then((res) => console.log("Update: ", res));
+      setStatus("pending");
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // Don't load until table data is returned
+  if (status === "idle") {
+    return null;
+  }
+
+  // Load error screen if table data goes wrong
+  if (status === "rejected") {
+    return <p>Something went wrong</p>;
+  }
+
+  // Main page
   return (
     <div>
       <MaterialTable
         editable={{
-          onRowAdd: (newRow) =>
-            new Promise((resolve, reject) => {
-              setStock([newRow, ...stock]);
-              postNewItem(newRow);
-              console.log(newRow);
-              resolve();
-              setrefreshFlag(!refreshFlag);
-            }),
+          onRowAdd: (newRow) => handleOnRowAdd(newRow),
         }}
         actions={[
           {
             icon: "delete",
             tooltip: "delete this entry",
             onClick: (item, rowdata) => {
-              new Promise((resolve, reject) => {
-                deleteTableItem(rowdata);
-                resolve();
-                setrefreshFlag(!refreshFlag);
-              });
+              handleOnRowDelete(rowdata);
             },
           },
           {
             icon: "update",
             tooltip: "update this entry",
             onClick: (item, rowdata) => {
-              new Promise((resolve, reject) => {
-                updateTableItem(rowdata);
-                resolve();
-                setrefreshFlag(!refreshFlag);
-              });
+              handleOnRowUpdate(rowdata);
             },
           },
         ]}
