@@ -1,46 +1,19 @@
 import React from "react";
 import { Bar } from "react-chartjs-2";
+import { getStockNumbers } from "../services/stockFilters";
 
-const BarGraph = () => {
+const BarGraph = ({ data }) => {
+  console.log("totalStock", data);
+
   return (
     <div className="graphContainer">
       <Bar
         data={{
-          labels: ["Computers", "Tablets", "Phones"],
+          labels: ["Order", "Stock", "Build"],
           datasets: [
             {
-              label: "Items in Stock",
-              data: [12, 19, 3],
-              backgroundColor: [
-                "rgba(255, 99, 132, 0.4)",
-                "rgba(54, 162, 235, 0.4)",
-                "rgba(255, 205, 86, 0.4)",
-              ],
-              borderColor: [
-                "rgba(255, 99, 132, 1)",
-                "rgba(54, 162, 235, 1)",
-                "rgba(255, 206, 86, 1)",
-              ],
-              borderWidth: 3,
-            },
-            {
-              label: "Items on Order",
-              data: [2, 4, 7],
-              backgroundColor: [
-                "rgba(255, 99, 132, 0.4)",
-                "rgba(54, 162, 235, 0.4)",
-                "rgba(255, 205, 86, 0.4)",
-              ],
-              borderColor: [
-                "rgba(255, 99, 132, 1)",
-                "rgba(54, 162, 235, 1)",
-                "rgba(255, 206, 86, 1)",
-              ],
-              borderWidth: 3,
-            },
-            {
-              label: "Items in Build",
-              data: [1, 1, 3],
+              label: "Stock Status",
+              data: [data.Order, data.Stock, data.Build],
               backgroundColor: [
                 "rgba(255, 99, 132, 0.4)",
                 "rgba(54, 162, 235, 0.4)",
@@ -60,7 +33,10 @@ const BarGraph = () => {
         options={{
           scales: {
             y: {
-              beginAtZero: true,
+              ticks: {
+                min: 0,
+                stepSize: 1,
+              },
             },
           },
         }}

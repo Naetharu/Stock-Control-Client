@@ -12,13 +12,13 @@ const Dashboard = () => {
   useEffect(() => {
     if (status === "idle" || status === "pending") {
       try {
-        fetch("http://localhost:5000/stock/")
+        fetch("http://localhost:5000/dashboard/")
           .then((res) => {
             if (res.ok) {
               return res.json();
             }
           })
-          .then((jsonRes) => setTotalStock(jsonRes.result));
+          .then((jsonRes) => setTotalStock(jsonRes.item));
         setStatus("resolved");
       } catch (error) {
         console.log(error);
@@ -27,7 +27,7 @@ const Dashboard = () => {
     }
   }, [status]);
 
-  console.log("totalStock", totalStock);
+  console.log("DATA: ", totalStock);
 
   if (status === "idle") {
     return null;
@@ -40,7 +40,7 @@ const Dashboard = () => {
   return (
     <div className="dashboardContainer">
       <div class="outerBox">
-        <BarGraph />
+        <BarGraph data={totalStock} />
         <LineGraph />
       </div>
       <div className="donuts">

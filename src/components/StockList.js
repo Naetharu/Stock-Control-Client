@@ -34,6 +34,7 @@ const StockTypes = () => {
     { title: "Location", field: "location" },
     { title: "Serial", field: "serial" },
     { title: "Asset", field: "asset" },
+    { title: "Date", field: "dueDate" },
   ];
 
   // CRUD functions for use in Material Table
