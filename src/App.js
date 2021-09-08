@@ -3,6 +3,7 @@ import "./styles/style.css";
 import { Router } from "@reach/router";
 import StockList from "./components/StockList";
 import Dashboard from "./components/Dashboard";
+import StockTable from "./components/StockTable";
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
       <Router className="router">
         <Dashboard path="dashboard" />
         <StockList path="stock" />
+        <StockTable path="table" />
       </Router>
     </div>
   );

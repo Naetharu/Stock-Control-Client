@@ -15,6 +15,9 @@ const Navbar = () => {
             <li className="topNavItem">
               <Link to="stock">Stock</Link>
             </li>
+            <li className="topNavItem">
+              <Link to="table">Table</Link>
+            </li>
           </ul>
         </nav>
       </div>
