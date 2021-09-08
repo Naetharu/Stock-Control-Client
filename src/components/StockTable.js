@@ -58,6 +58,18 @@ const StockTable = () => {
     },
     {
       field: "serial",
+      header: "serial",
+      width: 180,
+    },
+    {
+      field: "asset",
+      header: "asset",
+      width: 180,
+    },
+    {
+      field: "dueDate",
+      header: "dueDate",
+      width: 280,
     },
   ];
 
@@ -75,10 +87,24 @@ const StockTable = () => {
   if (status === "primed") {
     let answer = [];
 
-    // map through the data, inserting an id key into the first position of each object.
+    // map through the data:
+    // #1 inserting an id key into the first position of each object.
+    // #2 formatting the date into a UK readable format
     data.map((item, index) => {
+      // Add unique id to each item
       let temp = { id: index, ...item };
-      console.log("TEMP: ", temp);
+
+      // take the date from each item, and parse it into a JS Date
+      let date = temp.dueDate;
+      let options = {
+        weekday: "short",
+        day: "numeric",
+        month: "short",
+      };
+      date = new Date(date);
+      date = date.toLocaleDateString("en-UK", options);
+      temp.dueDate = date;
+
       answer.push(temp);
     });
 
